@@ -2,10 +2,47 @@
 
 ## 1. System Design
 
-**a. Initial design**
+Core Actions: Add a pet,  Create a task, and see your tasks for the day
 
+Brainstorm:
+
+
+**a. Initial design**
 - Briefly describe your initial UML design.
+My intial UML desing included  4 classes which are Owner, Pet, Task, and Scheduler. 
 - What classes did you include, and what responsibilities did you assign to each?
+
+Owner class: Owner class has name, list of pets, time_available for the day, 
+
+Methods:
+ add_pet()  
+ get_list_of_pets()
+
+Pet class: Pet class has name, species, and age of pet, and the list of tasks
+
+Methods:
+add_task to pet(task), 
+remove_task(taks_id), 
+get_tasks()
+task_count()
+
+
+
+Task class: Tasks has id, name, duration, priority, task status, category, time of the day(morning, evening, afternoon, night) status of task
+
+Methods:
+get_id
+task_valid
+update_status()-> aligns with number with switchs tatement updating it to value (not complete, inporgress, complete)
+
+Scheduler: Scheduler has owner class
+
+Methods:
+sort_takss bu priority and duration for each pet
+detect conflicts with time and priporty
+generate plan
+explain reasoning()-> how many tasks mad ethe cut and what got pleft behind
+getSummary() return summary of scheduled task
 
 **b. Design changes**
 
