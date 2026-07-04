@@ -80,14 +80,12 @@ Jordan's plan: 4 task(s) scheduled, 75 of 90 minutes used.
 
 ## 📐 Smarter Scheduling
 
-> Fill in once you've implemented scheduling logic.
-
 | Feature | Method(s) | Notes |
 |---------|-----------|-------|
-| Task sorting | | e.g., by priority, duration |
-| Filtering | | e.g., skip tasks if time runs out |
-| Conflict handling | | e.g., overlapping time slots |
-| Recurring tasks | | e.g., daily vs. weekly |
+| Task sorting | `Scheduler.sort_by_priority()`, `Scheduler.sort_by_time(tasks)` | `sort_by_priority()` orders all of the owner's tasks by combined priority + recurrence urgency (`Scheduler.user_task_priority()`), breaking ties by whether the task matches the owner's preferred time of day / category. `sort_by_time(tasks)` takes any list of tasks and orders them by `Task.task_window()` start time, placing flexible/any-time tasks last. `generate_plan()` runs both in sequence: priority first (to decide what fits the time budget), then time (to order the final schedule). |
+| Filtering | `Scheduler.filter_tasks(tasks=None, is_completed=None, pet=None)` | A single general-purpose filter: pass `pet=` to narrow to one pet's tasks, `is_completed=True/False` to narrow by completion status, or `tasks=` to filter a list you already have — any combination works, and leaving an argument as `None` skips that filter. |
+| Conflict handling | `Scheduler.detect_conflicts(tasks)` | Lightweight pairwise check: compares every pair of *incomplete* tasks' `Task.task_window()` ranges and returns a warning string for each pair whose windows overlap. Completed tasks and flexible/any-time tasks (`task_window()` returns `None`) are skipped, since neither can have a real scheduling conflict. |
+| Recurring tasks | `Task.reschedule(new_date)`, `Pet.complete_task(task, today)` | `Task.reschedule(new_date)` returns a fresh, incomplete copy of a task due on `new_date + Task.RECURRENCE_DELTAS[frequency]` (1 day for "daily", 7 days for "weekly"), or `None` for a one-off ("as_needed") task. `Pet.complete_task(task, today)` is the entry point: it marks the task complete, then calls `reschedule()` and adds the next occurrence to the pet's task list if one comes back. |
 
 ## 📸 Demo Walkthrough
 

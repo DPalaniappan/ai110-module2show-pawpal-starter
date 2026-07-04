@@ -67,11 +67,14 @@ Yes my design changed a lot during implementation after chatting with Claude Cod
 
 - What constraints does your scheduler consider (for example: time, priority, preferences)?
 - How did you decide which constraints mattered most?
+The constraints that me scheduler considered were the priority of the task, priority from the frequency, and then the owner preferences based on time of day and category. I decided that the priority of the task and frequency of the task mattered more as those priorities are greater than the user preferences as user preferences are mainly treated like suggestions, thus I decided to treat them as tie breakers for tasks have the same priority score. After that was the contraint of time as after sorting them by priority the schedule generator would take as many of the hhigh priority time tasks as it could within the time budget.
 
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
 - Why is that tradeoff reasonable for this scenario?
+
+One tradeoff the scheduler makes is that it uses a greedy algorithm meaning that if a task has a high priority and doesn't fit within the budgeted time then it is ignored. This is a reasonable trade off to make as it heavily reduces the code complexity as this would involve back tracking inot the scheduled-tasks and skipped-tasks and looking over what tasks to remove and keep in order to add a high priority task back into the scheduled tasks.
 
 ---
 
