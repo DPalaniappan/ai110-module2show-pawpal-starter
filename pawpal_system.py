@@ -81,9 +81,11 @@ class Pet:
     tasks: list[Task] = field(default_factory=list)
 
     def __post_init__(self):
-        """Validate that a pet name was actually provided."""
+        """Validate that a pet name and species were actually provided."""
         if not self.name or not self.name.strip():
             raise ValueError("Pet name cannot be empty.")
+        if not self.species or not self.species.strip():
+            raise ValueError("Pet species cannot be empty.")
 
     def add_task(self, task: Task) -> None:
         """Add a task to this pet's task list."""
@@ -124,6 +126,12 @@ class Owner:
         if any(existing.name.strip().lower() == pet.name.strip().lower() for existing in self.pets):
             raise ValueError(f"A pet named '{pet.name}' already exists for this owner.")
         self.pets.append(pet)
+
+    def remove_pet(self, pet: Pet) -> None:
+        """Remove the given pet from this owner; raises ValueError if it isn't assigned."""
+        if pet not in self.pets:
+            raise ValueError(f"Pet '{pet.name}' does not belong to this owner.")
+        self.pets.remove(pet)
 
     def get_list_of_pets(self) -> list[Pet]:
         """Return the list of pets belonging to this owner."""
