@@ -1,13 +1,36 @@
 classDiagram
     %% PawPal+ class diagram — based on the brainstorm in reflection.md.
     %% Keep this file updated so it matches your final implementation.
+    %% Task.time_of_day is an "HH:MM" string (e.g. "08:30"), or "" for flexible/any time.
+    %% Task.priority is "high" / "medium" / "low"; task_priority() maps it to
+    %% 1 / 2 / 3 via Task.PRIORITY_VALUES (1 = highest, 3 = lowest).
+    %% Task.frequency is "daily" / "weekly" / "as_needed"; frequency_priority() maps
+    %% it to 1 / 2 / 3 via Task.FREQUENCY_VALUES (1 = most urgent, 3 = least).
+    %% time_period() classifies time_of_day by its absolute minute-distance from
+    %% noon (12:00) into morning/afternoon/evening/night via Task.TIME_OF_DAY_RANGES;
+    %% returns "none" (and task_window() returns None) for a flexible/any-time task.
+    %% Scheduler holds only an Owner (no direct Pet reference) and builds one combined
+    %% schedule from _all_tasks() across every pet in owner.get_list_of_pets().
+    %% scheduled_tasks / skipped_tasks / sort_by_priority() all use (Pet, Task) tuples
+    %% so a task's owning pet is always available without a separate lookup.
+    %% Scheduler.user_task_priority(task) = task.task_priority() + task.frequency_priority();
+    %% lower combined score = scheduled sooner. sort_by_priority() breaks ties (equal
+    %% user_task_priority) first by matches_preferred_time(), then by matches_preferred_category().
 
-    class Owner {
+    class Task {
         +str name
-        +list~Pet~ pets
-        +int time_available
-        +add_pet(pet) None
-        +get_list_of_pets() list~Pet~
+        +int duration
+        +str priority
+        +str category
+        +str frequency
+        +str time_of_day
+        +bool is_completed
+        +mark_complete() None
+        +mark_incomplete() None
+        +task_priority() int
+        +frequency_priority() int
+        +task_window() tuple
+        +time_period() str
     }
 
     class Pet {
@@ -16,35 +39,38 @@ classDiagram
         +int age
         +list~Task~ tasks
         +add_task(task) None
-        +remove_task(task_id) None
+        +remove_task(task) None
         +get_tasks() list~Task~
         +task_count() int
     }
 
-    class Task {
-        +int id
+    class Owner {
         +str name
-        +int duration
-        +int priority
-        +str category
-        +str time_of_day
-        +str status
-        +get_id() int
-        +task_valid() bool
-        +update_status(code) None
+        +list~Pet~ pets
+        +int time_available
+        +list~str~ preferred_categories
+        +list~str~ preferred_times_of_day
+        +add_pet(pet) None
+        +get_list_of_pets() list~Pet~
     }
 
     class Scheduler {
         +Owner owner
-        +sort_tasks(pet) list~Task~
-        +detect_conflicts() list
+        +list scheduled_tasks
+        +list skipped_tasks
+        -_all_tasks() list
+        +user_task_priority(task) int
+        +matches_preferred_time(task) bool
+        +matches_preferred_category(task) bool
+        +sort_by_priority() list
+        +detect_conflicts() list~str~
         +generate_plan() dict
         +explain_reasoning() str
         +get_summary() str
+        +display_schedule() None
     }
 
     Owner "1" *-- "0..*" Pet : owns
     Pet "1" *-- "0..*" Task : has
     Scheduler "1" --> "1" Owner : schedules for
-    Scheduler ..> Pet : reads
     Scheduler ..> Task : orders

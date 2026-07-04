@@ -67,7 +67,15 @@ pytest --cov
 Sample test output:
 
 ```
-# Paste your pytest output here
+# Paste your output here
+
+Today's Schedule for Jordan's pets:
+  07:30 — Biscuit: Morning walk (30 min) [priority: high]
+  08:00 — Mochi: Morning feeding (10 min) [priority: high]
+  13:00 — Biscuit: Afternoon puzzle toy (20 min) [priority: medium]
+  18:00 — Mochi: Evening brushing (15 min) [priority: low]
+Jordan's plan: 4 task(s) scheduled, 75 of 90 minutes used.
+
 ```
 
 ## 📐 Smarter Scheduling

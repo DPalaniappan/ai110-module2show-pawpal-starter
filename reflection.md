@@ -2,7 +2,7 @@
 
 ## 1. System Design
 
-Core Actions: Add a pet,  Create a task, and see your tasks for the day
+Core Actions: Add a pet,  Create a task, and see a summary ofyour tasks for the day
 
 Brainstorm:
 
@@ -12,42 +12,52 @@ Brainstorm:
 My intial UML desing included  4 classes which are Owner, Pet, Task, and Scheduler. 
 - What classes did you include, and what responsibilities did you assign to each?
 
-Owner class: Owner class has name, list of pets, time_available for the day, 
+Owner class: Owner class has name, list of pets, time_available for the day, time of the day preferences, (morning, evening, afternoon, etc), categroy preferences as well (walk, etc). Raises an error if name is empty or time_available isn't a positive number.
 
 Methods:
- add_pet()  
- get_list_of_pets()
+add_pet(pet) -> rejects a pet if the owner already has one with the same name (case-insensitive)
+get_list_of_pets()
 
-Pet class: Pet class has name, species, and age of pet, and the list of tasks
+Pet class: Pet class has name, species, and age of pet, and the list of tasks. Raises an error if name is empty.
 
 Methods:
-add_task to pet(task), 
-remove_task(taks_id), 
+add_task(task)
+remove_task(task) -> now takes the Task object itself instead of a task_id
 get_tasks()
 task_count()
 
 
 
-Task class: Tasks has id, name, duration, priority, task status, category, time of the day(morning, evening, afternoon, night) status of task
+Task class: Tasks has name, duration, priority (low, medium, high), is_completed, category, frequency (daily, weekly, as_needed), time_of_day (an "HH:MM" string, or "" for a flexible/any-time task). Raises an error if name is empty.
 
 Methods:
-get_id
-task_valid
-update_status()-> aligns with number with switchs tatement updating it to value (not complete, inporgress, complete)
+mark_complete()
+mark_incomplete()
+task_priority() -> converts priority (high/medium/low) into 1/2/3
+frequency_priority() -> converts frequency (daily/weekly/as_needed) into 1/2/3
+task_window() -> parses time_of_day into (start, start+duration) minutes since midnight; returns None if flexible
+time_period() -> classifies time_of_day into morning/afternoon/evening/night by distance from noon; returns "none" if flexible
 
-Scheduler: Scheduler has owner class
+
+Scheduler: Scheduler only holds an owner now (no separate pet field) — it builds one combined schedule across every pet that owner has, instead of one schedule per pet.
 
 Methods:
-sort_takss bu priority and duration for each pet
-detect conflicts with time and priporty
-generate plan
-explain reasoning()-> how many tasks mad ethe cut and what got pleft behind
-getSummary() return summary of scheduled task
+user_task_priority(task)
+matches_preferred_time(task)
+matches_preferred_category(task)
+sort_by_priority() -> returns (pet, task) pairs from all pets, ordered by priority/frequency score with preference tiebreakers
+detect_conflicts() -> not implemented yet
+generate_plan()
+explain_reasoning()
+get_summary()
+display_schedule() -> prints "Today's Schedule" for all pets to the terminal
 
 **b. Design changes**
 
 - Did your design change during implementation?
 - If yes, describe at least one change and why you made it.
+
+Yes my design changed a lot during implementation after chatting with Claude Code as at first I focused on an appraoch for creating a seperate schedule for each pet given each of their tasks. However, after chatting with claude I realized that this was not the right approach as it would be weird to create a daily schedule for each pet, when for example you will most likely have to feed all of your pets daily. It would be a horrible choice to feed each of them for one day lol. Addionally after chatting with Claude I updated some attributes and methods for the classes as I realized it would be able to simplify my code and I would have an easier time accessing information as well.
 
 ---
 
