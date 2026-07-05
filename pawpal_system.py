@@ -253,7 +253,7 @@ class Scheduler:
         skipped_tasks = []
         time_remaining = self.owner.time_available
 
-        for task in self.sort_by_priority():
+        for task in self.filter_tasks(tasks=self.sort_by_priority(), is_completed=False):
             if task.duration <= time_remaining:
                 scheduled_tasks.append(task)
                 time_remaining -= task.duration

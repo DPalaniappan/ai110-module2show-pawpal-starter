@@ -67,7 +67,6 @@ pytest --cov
 Sample test output:
 
 ```
-# Paste your output here
 
 Today's Schedule for Jordan's pets:
   07:30 — Biscuit: Morning walk (30 min) [priority: high]
@@ -76,6 +75,37 @@ Today's Schedule for Jordan's pets:
   18:00 — Mochi: Evening brushing (15 min) [priority: low]
 Jordan's plan: 4 task(s) scheduled, 75 of 90 minutes used.
 
+```
+### Confidence Level
+
+★★★★★ — All **21tests pass**. 
+
+Pytests
+
+```
+tests/test_pawpal.py::test_mark_complete_changes_task_status PASSED                                                                                                                                         [  4%]
+tests/test_pawpal.py::test_add_task_increases_pet_task_count PASSED                                                                                                                                         [  9%]
+tests/test_pawpal.py::test_sort_by_time_returns_chronological_order PASSED                                                                                                                                  [ 14%]
+tests/test_pawpal.py::test_complete_daily_task_creates_task_for_following_day PASSED                                                                                                                        [ 19%]
+tests/test_pawpal.py::test_detect_conflicts_flags_overlapping_times PASSED                                                                                                                                  [ 23%]
+tests/test_pawpal.py::test_detect_conflicts_ignores_non_overlapping_times PASSED                                                                                                                            [ 28%]
+tests/test_pawpal.py::test_generate_plan_excludes_completed_tasks PASSED                                                                                                                                    [ 33%]
+tests/test_pawpal.py::test_generate_plan_schedules_across_multiple_pets PASSED                                                                                                                              [ 38%]
+tests/test_pawpal.py::test_sort_by_priority_orders_high_before_low PASSED                                                                                                                                   [ 42%]
+tests/test_pawpal.py::test_complete_weekly_task_creates_task_one_week_later PASSED                                                                                                                          [ 47%]
+tests/test_pawpal.py::test_complete_as_needed_task_does_not_reschedule PASSED                                                                                                                               [ 52%]
+tests/test_pawpal.py::test_sort_by_priority_tie_break_prefers_matching_time_and_category PASSED                                                                                                             [ 57%]
+tests/test_pawpal.py::test_generate_plan_skips_task_that_does_not_fit PASSED                                                                                                                                [ 61%]
+tests/test_pawpal.py::test_generate_plan_schedules_task_that_exactly_fills_remaining_time PASSED                                                                                                            [ 66%]
+tests/test_pawpal.py::test_add_pet_rejects_duplicate_name_case_insensitive PASSED                                                                                                                           [ 71%]
+tests/test_pawpal.py::test_owner_rejects_non_positive_time_available PASSED                                                                                                                                 [ 76%]
+tests/test_pawpal.py::test_pet_rejects_empty_name PASSED                                                                                                                                                    [ 80%]
+tests/test_pawpal.py::test_owner_rejects_empty_name PASSED                                                                                                                                                  [ 85%]
+tests/test_pawpal.py::test_remove_task_raises_when_task_not_assigned PASSED                                                                                                                                 [ 90%]
+tests/test_pawpal.py::test_remove_pet_raises_when_pet_not_assigned PASSED                                                                                                                                   [ 95%]
+tests/test_pawpal.py::test_generate_plan_with_no_pets_returns_empty_plan PASSED                                                                                                                             [100%]
+
+=============================================================================================== 21 passed in 0.05s ===============================================================================================
 ```
 
 ## 📐 Smarter Scheduling
